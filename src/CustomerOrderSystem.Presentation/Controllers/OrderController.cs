@@ -20,8 +20,11 @@ namespace CustomerOrderSystem.Presentation.Controllers
         }
 
         /// <summary>
-        /// Obtiene una orden por su ID
+        /// Recupera una orden específica por su identificador único.
         /// </summary>
+        /// <param name="id">ID de la orden.</param>
+        /// <response code="200">Retorna la orden encontrada.</response>
+        /// <response code="404">Si la orden no existe.</response>
         [HttpGet("{id}")]
         public async Task<ActionResult<OrderResponse>> GetById(Guid id)
         {
@@ -33,64 +36,57 @@ namespace CustomerOrderSystem.Presentation.Controllers
         }
 
         /// <summary>
-        /// Obtiene todas las órdenes de un cliente
+        /// Obtiene el historial de órdenes asociado a un cliente específico.
         /// </summary>
+        /// <param name="customerId">ID del cliente.</param>
+        /// <response code="200">Retorna la lista de órdenes (vacía si el cliente no tiene).</response>
         [HttpGet("customer/{customerId}")]
         public async Task<ActionResult<IEnumerable<OrderResponse>>> GetByCustomerId(Guid customerId)
         {
-            var orders = await _orderRepository.GetByCustomerIdAsync(customerId);
+            var orders = await _orderService.GetOrdersByCustomerAsync(customerId);
             return Ok(orders.Select(MapToResponse));
         }
 
         /// <summary>
-        /// Crea una nueva orden para un cliente
+        /// Crea una nueva orden de compra para un cliente existente.
         /// </summary>
+        /// <remarks>
+        /// La orden se crea inicialmente con estado 'Created'.
+        /// </remarks>
+        /// <param name="customerId">Identificador único del cliente.</param>
+        /// <response code="201">Orden creada exitosamente.</response>
+        /// <response code="400">Si el cliente no existe.</response>
         [HttpPost("{customerId}")]
         public async Task<ActionResult<OrderResponse>> Create(Guid customerId)
         {
-            try
-            {
-                var order = await _orderService.CreateOrderAsync(customerId);
-                return CreatedAtAction(nameof(GetById), new { id = order.Id }, MapToResponse(order));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            var order = await _orderService.CreateOrderAsync(customerId);
+            return CreatedAtAction(nameof(GetById), new { id = order.Id }, MapToResponse(order));
         }
 
         /// <summary>
-        /// Cancela una orden existente
+        /// Cambia el estado de una orden a 'Cancelled'.
         /// </summary>
+        /// <param name="orderId">ID de la orden a cancelar.</param>
+        /// <response code="204">Orden cancelada con éxito.</response>
+        /// <response code="400">Si la orden no existe.</response>
         [HttpPut("{orderId}/cancel")]
         public async Task<IActionResult> Cancel(Guid orderId)
         {
-            try
-            {
-                await _orderService.CancelOrderAsync(orderId);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            await _orderService.CancelOrderAsync(orderId);
+            return NoContent();
         }
 
         /// <summary>
-        /// Completa una orden existente
+        /// Cambia el estado de una orden a 'Completed'.
         /// </summary>
+        /// <param name="orderId">ID de la orden a completar.</param>
+        /// <response code="204">Orden completada con éxito.</response>
+        /// <response code="400">Si la orden no existe.</response>
         [HttpPut("{orderId}/complete")]
         public async Task<IActionResult> Complete(Guid orderId)
         {
-            try
-            {
-                await _orderService.CompleteOrderAsync(orderId);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { message = ex.Message });
-            }
+            await _orderService.CompleteOrderAsync(orderId);
+            return NoContent();
         }
 
         private static OrderResponse MapToResponse(Order order)

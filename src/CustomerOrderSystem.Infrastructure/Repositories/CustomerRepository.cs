@@ -22,6 +22,13 @@ namespace CustomerOrderSystem.Infrastructure.Repositories
             return await _context.Customers.FindAsync(id);
         }
 
+        public async Task<Customer?> GetByEmailAsync(string email)
+        {
+            var normalizedEmail = email.Trim().ToLowerInvariant();
+            return await _context.Customers
+                .FirstOrDefaultAsync(c => c.Email == normalizedEmail);
+        }
+
         public async Task<IEnumerable<Customer>> GetAllAsync()
         {
             return await _context.Customers.ToListAsync();

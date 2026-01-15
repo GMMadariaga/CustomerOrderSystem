@@ -37,7 +37,7 @@ graph TD
    ```bash
    dotnet run --project src/CustomerOrderSystem.Presentation
    ```
-3. **Probar**: Abre tu navegador en `https://localhost:7188/swagger` (revisa el puerto en la consola).
+3. **Probar**: Abre tu navegador en `https://localhost:7188` (la raíz redirige automáticamente a Swagger). Revisa el puerto en la consola si es diferente.
 
 ## Ejecutar tests
 `dotnet test`
@@ -104,7 +104,7 @@ graph TD
 ```
 
 
-## TODO: Mejoras a implementar
+## TODO: Mejoras que se pueden implementar
 
 Persistencia más robusta (SQL Server): Configurar *AppDbContext* usando variables de entorno para un manejo más seguro y flexible de la base de datos.
 
@@ -114,4 +114,6 @@ Optimizar presentación y mapeo: Estandarizar el uso de DTOs en todos los endpoi
 
 Mejorar el  Manejo de excepciones: Implementar un middleware de excepciones que reduzca el uso de *try-catch* en los controladores, mejorando la mantenibilidad y el rendimiento. 
 
-Docuentar los endpoints: Agregar documentación detallada de los endpoints para facilitar la comprensión y uso de la API en el Swagger.
+Documentar los endpoints: Agregar documentación detallada de los endpoints para facilitar la comprensión y uso de la API en el Swagger.
+
+Se puede Mapear de forma automática usando AutoMapper o similar.

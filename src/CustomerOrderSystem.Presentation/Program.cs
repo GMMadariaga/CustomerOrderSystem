@@ -4,12 +4,19 @@ using CustomerOrderSystem.Infrastructure.Repositories;
 using CustomerOrderSystem.Application.Services;
 using Microsoft.EntityFrameworkCore;
 
+using CustomerOrderSystem.Presentation.Middleware;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    options.IncludeXmlComments(xmlPath);
+});
 
 // Database Context - SQL Server para producción, InMemory para desarrollo
 if (builder.Environment.IsDevelopment())
@@ -34,10 +41,19 @@ builder.Services.AddScoped<CustomerService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddleware>();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    // Redirigir la raíz a Swagger  como documentacion
+    app.MapGet("/", (HttpContext context) =>
+    {
+        context.Response.Redirect("/swagger");
+        return Task.CompletedTask;
+    });
 }
 
 app.UseHttpsRedirection();

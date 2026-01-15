@@ -1,5 +1,6 @@
 using CustomerOrderSystem.Domain.Entities;
 using CustomerOrderSystem.Domain.Interfaces;
+using CustomerOrderSystem.Domain.Exceptions;
 
 namespace CustomerOrderSystem.Application.Services
 {
@@ -17,6 +18,15 @@ namespace CustomerOrderSystem.Application.Services
             _customerRepository = customerRepository;
         }
 
+        public async Task<IEnumerable<Order>> GetOrdersByCustomerAsync(Guid customerId)
+        {
+            var customer = await _customerRepository.GetByIdAsync(customerId);
+            if (customer == null)
+                throw new DomainException("Customer not found.");
+
+            return await _orderRepository.GetByCustomerIdAsync(customerId);
+        }
+
         /// <summary>
         /// Crea una nueva orden para un cliente
         /// </summary>
@@ -24,7 +34,7 @@ namespace CustomerOrderSystem.Application.Services
         {
             var customer = await _customerRepository.GetByIdAsync(customerId);
             if (customer == null)
-                throw new Exception("Customer not found.");
+                throw new DomainException("Customer not found.");
 
             var order = new Order(customerId);
             await _orderRepository.AddAsync(order);
@@ -38,7 +48,7 @@ namespace CustomerOrderSystem.Application.Services
         {
             var order = await _orderRepository.GetByIdAsync(orderId);
             if (order == null)
-                throw new Exception("Order not found.");
+                throw new DomainException("Order not found.");
 
             order.Cancel();
             await _orderRepository.UpdateAsync(order);
@@ -51,7 +61,7 @@ namespace CustomerOrderSystem.Application.Services
         {
             var order = await _orderRepository.GetByIdAsync(orderId);
             if (order == null)
-                throw new Exception("Order not found.");
+                throw new DomainException("Order not found.");
 
             order.Complete();
             await _orderRepository.UpdateAsync(order);

@@ -1,3 +1,5 @@
+using CustomerOrderSystem.Domain.Exceptions;
+
 namespace CustomerOrderSystem.Domain.Entities
 {
     /// <summary>
@@ -15,9 +17,15 @@ namespace CustomerOrderSystem.Domain.Entities
 
         public Customer(string name, string email)
         {
+            if (string.IsNullOrWhiteSpace(name))
+                throw new DomainException("Customer name cannot be empty.");
+
+            if (string.IsNullOrWhiteSpace(email) || !email.Contains("@"))
+                throw new DomainException("Invalid email format.");
+
             Id = Guid.NewGuid();
             Name = name;
-            Email = email;
+            Email = email.ToLowerInvariant();
             Status = CustomerStatus.Active;
             CreatedAt = DateTime.UtcNow;
         }

@@ -1,5 +1,6 @@
 using CustomerOrderSystem.Domain.Entities;
 using CustomerOrderSystem.Domain.Interfaces;
+using CustomerOrderSystem.Domain.Exceptions;
 
 namespace CustomerOrderSystem.Application.Services
 {
@@ -27,7 +28,12 @@ namespace CustomerOrderSystem.Application.Services
 
         public async Task<Customer> CreateCustomerAsync(string name, string email)
         {
-            var customer = new Customer(name, email);
+            var normalizedEmail = email.Trim().ToLowerInvariant();
+            var existingCustomer = await _customerRepository.GetByEmailAsync(normalizedEmail);
+            if (existingCustomer != null)
+                throw new DomainException("A customer with this email already exists.");
+
+            var customer = new Customer(name, normalizedEmail);
             await _customerRepository.AddAsync(customer);
             return customer;
         }

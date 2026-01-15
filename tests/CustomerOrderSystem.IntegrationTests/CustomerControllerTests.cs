@@ -34,7 +34,7 @@ namespace CustomerOrderSystem.IntegrationTests
         public async Task CreateCustomer_ReturnsCreated_WithValidData()
         {
             // Arrange
-            var newCustomer = new { name = "Juan Pérez", email = "juan@test.com" };
+            var newCustomer = new { name = "Guillermo", email = "guille@test.com" };
             var json = JsonSerializer.Serialize(newCustomer);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -45,8 +45,8 @@ namespace CustomerOrderSystem.IntegrationTests
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
             
             var responseContent = await response.Content.ReadAsStringAsync();
-            Assert.Contains("Juan Pérez", responseContent);
-            Assert.Contains("juan@test.com", responseContent);
+            Assert.Contains("Guillermo", responseContent);
+            Assert.Contains("guille@test.com", responseContent);
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace CustomerOrderSystem.IntegrationTests
         public async Task CreateAndRetrieveCustomer_WorksCorrectly()
         {
             // Arrange
-            var newCustomer = new { name = "María García", email = "maria@test.com" };
+            var newCustomer = new { name = "Guillermo", email = "guille.unique@test.com" };
             var json = JsonSerializer.Serialize(newCustomer);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -83,9 +83,9 @@ namespace CustomerOrderSystem.IntegrationTests
             // Assert
             getResponse.EnsureSuccessStatusCode();
             var retrievedCustomer = await getResponse.Content.ReadFromJsonAsync<CustomerResponse>();
-            
-            Assert.Equal("María García", retrievedCustomer!.Name);
-            Assert.Equal("maria@test.com", retrievedCustomer.Email);
+
+            Assert.Equal("Guillermo", retrievedCustomer!.Name);
+            Assert.Equal("guille.unique@test.com", retrievedCustomer.Email);
         }
 
         // DTO para deserializar la respuesta

@@ -1,6 +1,7 @@
 ﻿using CustomerOrderSystem.Application.Services;
 using CustomerOrderSystem.Domain.Entities;
 using CustomerOrderSystem.Domain.Interfaces;
+using CustomerOrderSystem.Domain.Exceptions;
 using Moq;
 
 namespace CustomerOrderSystem.Tests
@@ -25,7 +26,7 @@ namespace CustomerOrderSystem.Tests
         {
             // Arrange
             var customerId = Guid.NewGuid();
-            var customer = new Customer("customer1", "customer1@test.com");
+            var customer = new Customer("Guillermo", "guille@test.com");
             
             _customerRepositoryMock
                 .Setup(r => r.GetByIdAsync(customerId))
@@ -51,7 +52,7 @@ namespace CustomerOrderSystem.Tests
                 .ReturnsAsync((Customer?)null);
 
             // Act & Assert
-            await Assert.ThrowsAsync<Exception>(
+            await Assert.ThrowsAsync<DomainException>(
                 () => _orderService.CreateOrderAsync(customerId));
         }
 
