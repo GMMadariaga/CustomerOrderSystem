@@ -84,12 +84,7 @@ namespace CustomerOrderSystem.Presentation.Controllers
         {
             try
             {
-                var order = await _orderRepository.GetByIdAsync(orderId);
-                if (order == null)
-                    return NotFound();
-
-                order.Complete();
-                await _orderRepository.UpdateAsync(order);
+                await _orderService.CompleteOrderAsync(orderId);
                 return NoContent();
             }
             catch (Exception ex)

@@ -15,5 +15,20 @@
   "getCustomerById": {
     "method": "GET",
     "url": "/api/Customer/{id}"
+  },
+  "createOrder": {
+    "method": "POST",
+    "url": "/api/Order/{customerId}",
+    "description": "Crear una nueva orden para un cliente"
+  },
+  "cancelOrder": {
+    "method": "PUT",
+    "url": "/api/Order/{orderId}/cancel",
+    "description": "Cancelar una orden existente"
+  },
+  "completeOrder": {
+    "method": "PUT",
+    "url": "/api/Order/{orderId}/complete",
+    "description": "Completar una orden existente"
   }
 }

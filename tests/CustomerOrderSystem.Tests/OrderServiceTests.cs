@@ -73,5 +73,24 @@ namespace CustomerOrderSystem.Tests
             // Assert
             Assert.Equal(OrderStatus.Cancelled, order.Status);
         }
+
+        [Fact]
+        public async Task CompleteOrderAsync_WithValidOrder_CompletesOrder()
+        {
+            // Arrange
+            var customerId = Guid.NewGuid();
+            var order = new Order(customerId);
+            var orderId = order.Id;
+
+            _orderRepositoryMock
+                .Setup(r => r.GetByIdAsync(orderId))
+                .ReturnsAsync(order);
+
+            // Act
+            await _orderService.CompleteOrderAsync(orderId);
+
+            // Assert
+            Assert.Equal(OrderStatus.Completed, order.Status);
+        }
     }
 }

@@ -43,5 +43,18 @@ namespace CustomerOrderSystem.Application.Services
             order.Cancel();
             await _orderRepository.UpdateAsync(order);
         }
+
+        /// <summary>
+        /// Completa una orden existente
+        /// </summary>
+        public async Task CompleteOrderAsync(Guid orderId)
+        {
+            var order = await _orderRepository.GetByIdAsync(orderId);
+            if (order == null)
+                throw new Exception("Order not found.");
+
+            order.Complete();
+            await _orderRepository.UpdateAsync(order);
+        }
     }
 }

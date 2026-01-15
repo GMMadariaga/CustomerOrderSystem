@@ -22,16 +22,30 @@ El proyecto está organizado en varias capas para asegurar una clara separación
 - **Presentation**: Exposición de los endpoints en controladores y configuración de la API.    
 - **Tests**: Pruebas unitarias e integrales.
 
-## Como ejecutar el proyecto localmente:
-1. Clonar el repositorio
-2. Abrir en Visual Studio Code
-3. Restaurar dependencias: `dotnet restore`
-4. Ejecutar: `dotnet run --project src/CustomerOrderSystem.Presentation`
-5. Abrir en el navegador: https://localhost:7188/swagger
+### Diagrama de la Arquitectura
+```mermaid
+graph TD
+    Presentation --> Application
+    Application --> Domain
+    Infrastructure --> Domain
+```
+
+
+## Cómo ejecutar el proyecto:
+1. **Restaurar**: `dotnet restore`
+2. **Ejecutar**:
+   ```bash
+   dotnet run --project src/CustomerOrderSystem.Presentation
+   ```
+3. **Probar**: Abre tu navegador en `https://localhost:7188/swagger` (revisa el puerto en la consola).
 
 ## Ejecutar tests
- 
 `dotnet test`
+
+## Scripts y Datos
+- **data/**: Contiene el archivo `sample-requests.json` con ejemplos de peticiones para probar la API.
+- **scripts/**: Contiene `verify-and-start.ps1`, un script sencillo para ejecutar pruebas y arrancar el proyecto en un solo paso.
+
  
 ## Endpoints
 
@@ -46,9 +60,9 @@ El proyecto está organizado en varias capas para asegurar una clara separación
 
 ## Pendientes
 
-- Tests de integración
-- Endpoints de Order en el controlador
+- Completar más casos de borde en tests de integración
 - Configuración para SQL Server en producción
+
 
 ## Ejemplo de uso
 
@@ -80,6 +94,24 @@ El proyecto está organizado en varias capas para asegurar una clara separación
     "method": "PUT",
     "url": "/api/Order/{orderId}/cancel",
     "description": "Cancelar una orden existente"
+  },
+  "completeOrder": {
+    "method": "PUT",
+    "url": "/api/Order/{orderId}/complete",
+    "description": "Completar una orden existente"
   }
 }
 ```
+
+
+## TODO: Mejoras a implementar
+
+Persistencia más robusta (SQL Server): Configurar *AppDbContext* usando variables de entorno para un manejo más seguro y flexible de la base de datos.
+
+Mejorar las validaciones en el dominio: Agregar validaciones internas  en las entidades para controlar que las reglas de negocio se cumplan desde el núcleo.
+
+Optimizar presentación y mapeo: Estandarizar el uso de DTOs en todos los endpoints para mantener consistencia y claridad en la comunicación entre capas. 
+
+Mejorar el  Manejo de excepciones: Implementar un middleware de excepciones que reduzca el uso de *try-catch* en los controladores, mejorando la mantenibilidad y el rendimiento. 
+
+Docuentar los endpoints: Agregar documentación detallada de los endpoints para facilitar la comprensión y uso de la API en el Swagger.

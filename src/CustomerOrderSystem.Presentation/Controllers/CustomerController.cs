@@ -1,5 +1,6 @@
 using CustomerOrderSystem.Domain.Entities;
 using CustomerOrderSystem.Domain.Interfaces;
+using CustomerOrderSystem.Application.Services;
 using CustomerOrderSystem.Presentation.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,11 +10,11 @@ namespace CustomerOrderSystem.Presentation.Controllers
     [Route("api/[controller]")]
     public class CustomerController : ControllerBase
     {
-        private readonly ICustomerRepository _customerRepository;
+        private readonly CustomerService _customerService;
 
-        public CustomerController(ICustomerRepository customerRepository)
+        public CustomerController(CustomerService customerService)
         {
-            _customerRepository = customerRepository;
+            _customerService = customerService;
         }
 
         /// <summary>
@@ -22,7 +23,7 @@ namespace CustomerOrderSystem.Presentation.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetAll()
         {
-            var customers = await _customerRepository.GetAllAsync();
+            var customers = await _customerService.GetAllCustomersAsync();
             return Ok(customers);
         }
 
@@ -32,7 +33,7 @@ namespace CustomerOrderSystem.Presentation.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetById(Guid id)
         {
-            var customer = await _customerRepository.GetByIdAsync(id);
+            var customer = await _customerService.GetCustomerByIdAsync(id);
             if (customer == null)
                 return NotFound();
 
@@ -45,8 +46,7 @@ namespace CustomerOrderSystem.Presentation.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> Create([FromBody] CustomerCreateRequest request)
         {
-            var customer = new Customer(request.Name, request.Email);
-            await _customerRepository.AddAsync(customer);
+            var customer = await _customerService.CreateCustomerAsync(request.Name, request.Email);
             return CreatedAtAction(nameof(GetById), new { id = customer.Id }, customer);
         }
     }

@@ -11,9 +11,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Database Context - usando InMemory para desarrollo
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseInMemoryDatabase("CustomerOrderDb"));
+// Database Context - SQL Server para producción, InMemory para desarrollo
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseInMemoryDatabase("CustomerOrderDb"));
+}
+else
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
 
 // Repositories
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
@@ -21,6 +29,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 // Application Services
 builder.Services.AddScoped<OrderService>();
+builder.Services.AddScoped<CustomerService>();
 
 var app = builder.Build();
 
@@ -36,3 +45,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Clase pública para tests de integración
+public partial class Program { }
