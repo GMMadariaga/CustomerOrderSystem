@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CustomerOrderSystem.Application\CustomerOrderSystem.Application.csproj" />
+    <ProjectReference Include="..\CustomerOrderSystem.Infrastructure\CustomerOrderSystem.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
