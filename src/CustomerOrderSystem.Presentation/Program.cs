@@ -18,16 +18,18 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(xmlPath);
 });
 
-// Database Context - SQL Server para producción, InMemory para desarrollo
-if (builder.Environment.IsDevelopment())
+// Database Context, Selección entre InMemory y SQL Server
+var useSqlServer = builder.Configuration.GetValue<bool>("UseSqlServer");
+
+if (useSqlServer)
 {
     builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseInMemoryDatabase("CustomerOrderDb"));
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 }
 else
 {
     builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+        options.UseInMemoryDatabase("CustomerOrderDb"));
 }
 
 // Repositories

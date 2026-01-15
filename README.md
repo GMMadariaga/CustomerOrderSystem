@@ -32,15 +32,39 @@ graph TD
 
 
 ## Cómo ejecutar el proyecto:
+
+### Opción 1: Inicio Automatizado (Recomendado)
+Ejecuta el script incluido para validar el sistema y abrir el navegador automáticamente:
+```powershell
+./scripts/verify-and-start.ps1
+```
+
+### Opción 2: Ejecución estándar
 1. **Restaurar**: `dotnet restore`
 2. **Ejecutar**:
    ```bash
    dotnet run --project src/CustomerOrderSystem.Presentation
    ```
-3. **Probar**: Abre tu navegador en `https://localhost:7188` (la raíz redirige automáticamente a Swagger). Revisa el puerto en la consola si es diferente.
+3. **Probar**: Abre tu navegador en `https://localhost:7188` (la raíz redirige a Swagger).
 
 ## Ejecutar tests
 `dotnet test`
+
+## Configuración de Base de Datos (Modo Dual)
+
+El sistema está configurado para operar de dos formas, permitiendo una evaluación rápida o una prueba en un entorno real:
+
+*Modo In-Memory, Predeterminado*: Ideal para ejecución inmediata
+1. *Modo SQL Server*: Para persistencia sql server.
+
+### Cómo activar SQL Server:
+1. Crear un archivo llamado `appsettings.json` en `src/CustomerOrderSystem.Presentation/` (por favor usar `appsettings.template.json` como guía). **Nota**: Este archivo está excluido del repositorio por seguridad.
+2. En dicho archivo, cambia `"UseSqlServer": false` a `true`.
+3. Asegúrate de que la cadena de conexión `DefaultConnection` apunta a tu servidor local.
+4. Ejecuta las migraciones para crear la base de datos. **Importante**: El comando creará automáticamente la base de datos con el nombre indicado (ej. `CustomerOrderSystem`) si esta aún no existe en tu servidor:
+   ```bash
+   dotnet ef database update --project src/CustomerOrderSystem.Infrastructure --startup-project src/CustomerOrderSystem.Presentation
+   ```
 
 ## Scripts y Datos
 - **data/**: Contiene el archivo `sample-requests.json` con ejemplos de peticiones para probar la API.
@@ -106,14 +130,9 @@ graph TD
 
 ## TODO: Mejoras que se pueden implementar
 
-Persistencia más robusta (SQL Server): Configurar *AppDbContext* usando variables de entorno para un manejo más seguro y flexible de la base de datos.
-
-Mejorar las validaciones en el dominio: Agregar validaciones internas  en las entidades para controlar que las reglas de negocio se cumplan desde el núcleo.
 
 Optimizar presentación y mapeo: Estandarizar el uso de DTOs en todos los endpoints para mantener consistencia y claridad en la comunicación entre capas. 
 
-Mejorar el  Manejo de excepciones: Implementar un middleware de excepciones que reduzca el uso de *try-catch* en los controladores, mejorando la mantenibilidad y el rendimiento. 
 
-Documentar los endpoints: Agregar documentación detallada de los endpoints para facilitar la comprensión y uso de la API en el Swagger.
 
 Se puede Mapear de forma automática usando AutoMapper o similar.

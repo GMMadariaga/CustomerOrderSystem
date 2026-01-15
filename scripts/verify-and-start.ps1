@@ -12,4 +12,10 @@ if ($LASTEXITCODE -ne 0) {
 
 Write-Host "`n2. Iniciando la aplicación..." -ForegroundColor Yellow
 Write-Host "Nota: La raíz (/) redirige automáticamente a Swagger." -ForegroundColor Gray
+
+Start-Job -ScriptBlock { 
+    Start-Sleep -Seconds 5
+    Start-Process "https://localhost:7188"
+} | Out-Null
+
 dotnet run --project src/CustomerOrderSystem.Presentation

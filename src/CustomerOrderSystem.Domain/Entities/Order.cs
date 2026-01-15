@@ -1,4 +1,6 @@
-﻿namespace CustomerOrderSystem.Domain.Entities
+﻿using CustomerOrderSystem.Domain.Exceptions;
+
+namespace CustomerOrderSystem.Domain.Entities
 {
     /// <summary>
     /// Representa una orden realizada por un cliente.
@@ -22,11 +24,17 @@
 
         public void Cancel()
         {
+            if (Status != OrderStatus.Created)
+                throw new DomainException($"Cannot cancel an order that is already {Status.ToString().ToLower()}.");
+
             Status = OrderStatus.Cancelled;
         }
 
         public void Complete()
         {
+            if (Status != OrderStatus.Created)
+                throw new DomainException($"Cannot complete an order that is already {Status.ToString().ToLower()}.");
+
             Status = OrderStatus.Completed;
         }
     }
