@@ -26,7 +26,15 @@ namespace CustomerOrderSystem.Presentation.Middleware
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An unhandled exception has occurred.");
+                if (ex is DomainException)
+                {
+                    _logger.LogInformation(ex.Message);
+                }
+                else
+                {
+                    _logger.LogError(ex, "An unhandled exception has occurred.");
+                }
+
                 await HandleExceptionAsync(context, ex);
             }
         }

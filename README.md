@@ -32,20 +32,12 @@ graph TD
 
 
 ## Cómo ejecutar el proyecto:
-
-### Opción 1: Inicio Automatizado (Recomendado)
-Ejecuta el script incluido para validar el sistema y abrir el navegador automáticamente:
-```powershell
-./scripts/verify-and-start.ps1
-```
-
-### Opción 2: Ejecución estándar
 1. **Restaurar**: `dotnet restore`
 2. **Ejecutar**:
    ```bash
    dotnet run --project src/CustomerOrderSystem.Presentation
    ```
-3. **Probar**: Abre tu navegador en `https://localhost:7188` (la raíz redirige a Swagger).
+3. **Probar**: Abre tu navegador en `https://localhost:7188` (la raíz redirige automáticamente a Swagger). Revisa el puerto en la consola si es diferente.
 
 ## Ejecutar tests
 `dotnet test`
@@ -57,10 +49,10 @@ El sistema está configurado para operar de dos formas, permitiendo una evaluaci
 *Modo In-Memory, Predeterminado*: Ideal para ejecución inmediata
 1. *Modo SQL Server*: Para persistencia sql server.
 
-### Cómo activar SQL Server:
+### Cómo activar SQL Server?:
 1. Crear un archivo llamado `appsettings.json` en `src/CustomerOrderSystem.Presentation/` (por favor usar `appsettings.template.json` como guía). **Nota**: Este archivo está excluido del repositorio por seguridad.
 2. En dicho archivo, cambia `"UseSqlServer": false` a `true`.
-3. Asegúrate de que la cadena de conexión `DefaultConnection` apunta a tu servidor local.
+3. Asegúrate de que la cadena de conexión `DefaultConnection` apunta al servidor local.
 4. Ejecuta las migraciones para crear la base de datos. **Importante**: El comando creará automáticamente la base de datos con el nombre indicado (ej. `CustomerOrderSystem`) si esta aún no existe en tu servidor:
    ```bash
    dotnet ef database update --project src/CustomerOrderSystem.Infrastructure --startup-project src/CustomerOrderSystem.Presentation
@@ -68,7 +60,15 @@ El sistema está configurado para operar de dos formas, permitiendo una evaluaci
 
 ## Scripts y Datos
 - **data/**: Contiene el archivo `sample-requests.json` con ejemplos de peticiones para probar la API.
+- **tests/CustomerOrderSystemJson.json**: Definición OpenAPI (Swagger) que puedes importar en **Postman** o **Bruno** para probar todos los endpoints rápidamente.
 - **scripts/**: Contiene `verify-and-start.ps1`, un script sencillo para ejecutar pruebas y arrancar el proyecto en un solo paso.
+- Ejecutar: `./scripts/verify-and-start.ps1`
+
+### Cómo importar a herramientas de testeo Postman/Bruno:
+1. Abre Postman o Bruno.
+2. Selecciona la opción **Import**.
+3. Elige el archivo ubicado en `tests/CustomerOrderSystemJson.json`.
+4. Tendremo todos los endpoints configurados con sus ejemplos y tipos de datos.
 
  
 ## Endpoints

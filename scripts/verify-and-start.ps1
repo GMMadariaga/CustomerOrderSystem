@@ -1,6 +1,7 @@
-#Script para preparar el entorno de desarrollo y ejecutar la aplicación y hacer pruebas antes de iniciar.
-
 Write-Host "Iniciando CustomerOrderSystem..." -ForegroundColor Cyan
+
+# Cerrar procesos previos de dotnet para evitar conflictos de puerto
+Get-Process dotnet -ErrorAction SilentlyContinue | Stop-Process -Force
 
 Write-Host "`n1. Ejecutando pruebas unitarias e integrales..." -ForegroundColor Yellow
 dotnet test
