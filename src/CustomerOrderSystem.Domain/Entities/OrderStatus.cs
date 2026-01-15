@@ -1,9 +1,12 @@
 namespace CustomerOrderSystem.Domain.Entities
 {
-    ///
-    public enum OrderSatatus
-    { 
-         
+    /// <summary>
+    /// Estados posibles de una orden
+    /// </summary>
+    public enum OrderStatus
+    {
+        Created,
+        Completed,
+        Cancelled
     }
-
 }
