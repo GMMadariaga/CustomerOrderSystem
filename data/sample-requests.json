@@ -1,0 +1,19 @@
+{
+  "description": "Ejemplos de requests para la API",
+  "createCustomer": {
+    "method": "POST",
+    "url": "/api/Customer",
+    "body": {
+      "name": "Guillermo Madariaga",
+      "email": "guille@test.com"
+    }
+  },
+  "getCustomers": {
+    "method": "GET",
+    "url": "/api/Customer"
+  },
+  "getCustomerById": {
+    "method": "GET",
+    "url": "/api/Customer/{id}"
+  }
+}

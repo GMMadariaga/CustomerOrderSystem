@@ -1,5 +1,6 @@
 using CustomerOrderSystem.Domain.Entities;
 using CustomerOrderSystem.Domain.Interfaces;
+using CustomerOrderSystem.Presentation.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CustomerOrderSystem.Presentation.Controllers
@@ -42,20 +43,12 @@ namespace CustomerOrderSystem.Presentation.Controllers
         /// Crea un nuevo cliente
         /// </summary>
         [HttpPost]
-        public async Task<ActionResult<Customer>> Create([FromBody] CreateCustomerRequest request)
+        public async Task<ActionResult<Customer>> Create([FromBody] CustomerCreateRequest request)
         {
             var customer = new Customer(request.Name, request.Email);
             await _customerRepository.AddAsync(customer);
             return CreatedAtAction(nameof(GetById), new { id = customer.Id }, customer);
         }
     }
-
-    /// <summary>
-    /// Request para crear un cliente
-    /// </summary>
-    public class CreateCustomerRequest
-    {
-        public string Name { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-    }
+ 
 }
