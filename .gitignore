@@ -678,8 +678,5 @@ $RECYCLE.BIN/
 # Vim temporary swap files
 *.swp
 
-# Documentos del reto (no subir al repo)
-docs/
-
 # Configuración local
 appsettings.json

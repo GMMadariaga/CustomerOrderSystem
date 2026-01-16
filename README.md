@@ -68,7 +68,7 @@ El sistema está configurado para operar de dos formas, permitiendo una evaluaci
 1. Abre Postman o Bruno.
 2. Selecciona la opción **Import**.
 3. Elige el archivo ubicado en `tests/CustomerOrderSystemJson.json`.
-4. Tendremo todos los endpoints configurados con sus ejemplos y tipos de datos.
+4. Tendremos todos los endpoints configurados con sus ejemplos y tipos de datos.
 
  
 ## Endpoints
@@ -79,8 +79,11 @@ El sistema está configurado para operar de dos formas, permitiendo una evaluaci
 - `POST /api/Customer` - Crea un nuevo cliente
 
 ### Order
+- `GET /api/Order/{id}` - Obtiene una orden por su ID
+- `GET /api/Order/customer/{customerId}` - Obtiene todas las órdenes de un cliente
 - `POST /api/Order/{customerId}` - Crea una nueva orden para un cliente
 - `PUT /api/Order/{orderId}/cancel` - Cancela una orden existente
+- `PUT /api/Order/{orderId}/complete` - Completa una orden existente
 
 ## Pendientes
 
