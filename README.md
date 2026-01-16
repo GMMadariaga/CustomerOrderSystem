@@ -80,16 +80,19 @@ El sistema está configurado para operar de dos formas, permitiendo una evaluaci
 
 ### Order
 - `GET /api/Order/{id}` - Obtiene una orden por su ID
-- `GET /api/Order/customer/{customerId}` - Obtiene todas las órdenes de un cliente
-- `POST /api/Order/{customerId}` - Crea una nueva orden para un cliente
-- `PUT /api/Order/{orderId}/cancel` - Cancela una orden existente
-- `PUT /api/Order/{orderId}/complete` - Completa una orden existente
-
-## Pendientes
-
-- Completar más casos de borde en tests de integración
-- Configuración para SQL Server en producción
-
+  - **200**: Retorna la orden encontrada
+  - **404**: Si la orden no existe
+- `GET /api/Order/customer/{customerId}` - Obtiene el historial de órdenes de un cliente
+  - **200**: Retorna la lista de órdenes (vacía si el cliente no tiene)
+- `POST /api/Order/{customerId}` - Crea una nueva orden para un cliente (estado inicial: 'Created')
+  - **201**: Orden creada exitosamente
+  - **400**: Si el cliente no existe
+- `PUT /api/Order/{orderId}/cancel` - Cambia el estado de una orden a 'Cancelled'
+  - **204**: Orden cancelada con éxito
+  - **400**: Si la orden no existe
+- `PUT /api/Order/{orderId}/complete` - Cambia el estado de una orden a 'Completed'
+  - **204**: Orden completada con éxito
+  - **400**: Si la orden no existe
 
 ## Ejemplo de uso
 
@@ -131,11 +134,10 @@ El sistema está configurado para operar de dos formas, permitiendo una evaluaci
 ```
 
 
-## TODO: Mejoras que se pueden implementar
+## Mejoras futuras
 
+Gracias a la arquitectura limpia implementada, el proyecto permite agregar fácilmente:
 
-Optimizar presentación y mapeo: Estandarizar el uso de DTOs en todos los endpoints para mantener consistencia y claridad en la comunicación entre capas. 
-
-
-
-Se puede Mapear de forma automática usando AutoMapper o similar.
+- **Seguridad**: Implementar autenticación y autorización (JWT, OAuth, etc.)
+- **Actualización de Framework**: Migrar de .NET 6 a .NET 8 o 9 sin modificar la lógica de negocio
+- **Mapeo Automático**: Integrar AutoMapper o similar para simplificar la conversión entre DTOs y entidades
